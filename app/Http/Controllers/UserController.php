@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
+use Inertia\Inertia;
 
 class UserController extends Controller
 {
@@ -14,7 +15,8 @@ class UserController extends Controller
     public function index()
     {
         $users = User::all();
-        return view('user.index', compact('users'));
+        // return view('users.index', compact('users'));
+        return Inertia::render('Users/Index', compact('users'));
     }
 
     /**
@@ -22,7 +24,7 @@ class UserController extends Controller
      */
     public function create()
     {
-        return view('user.create');
+        return Inertia::render('Users/Create');
     }
 
     /**
@@ -60,7 +62,8 @@ class UserController extends Controller
      */
     public function edit(string $id)
     {
-        return view('users.edit', compact('user'));
+        $user = User::findOrFail($id);
+        return Inertia::render('Users/Edit', compact('user'));
     }
 
     /**
