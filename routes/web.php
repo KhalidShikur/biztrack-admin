@@ -24,6 +24,7 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
 
 Route::middleware(['auth'])->group(function () {
     Route::resource('stocks', StockController::class);
+    Route::get('/stocks/{stock}/history', [StockController::class, 'history'])->name('stocks.history');
 });
 
 require __DIR__.'/settings.php';

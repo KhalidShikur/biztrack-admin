@@ -14,4 +14,9 @@ class Stock extends Model
         'sell_price',
         'low_stock_alert',
     ];
+
+    public function movements()
+    {
+        return $this->hasMany(StockMovement::class);
+    }
 }

@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Stock;
+use App\Models\StockMovement;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -13,10 +15,26 @@ class StockController extends Controller
      */
     public function index()
     {
+        $stocks = Stock::all()->map(function ($stock) {
+            return [
+                ...$stock->toArray(),
+                'is_low' => $stock->quantity <= $stock->low_stock_alert,
+                'profit_per_item' => $stock->sell_price - $stock->buy_price,
+            ];
+        });
+
+        $lowStockCount = Stock::whereColumn(
+            'quantity',
+            '<=',
+            'low_stock_alert'
+        )->count();
+
         return Inertia::render('Stocks/Index', [
-            'stocks' => Stock::latest()->get(),
+            'stocks' => $stocks,
+            'lowStockCount' => $lowStockCount,
         ]);
     }
+
 
     /**
      * Show the form for creating a new resource.
@@ -39,7 +57,15 @@ class StockController extends Controller
             'sell_price' => 'required|numeric',
         ]);
 
-        Stock::create($request->all());
+        $stock = Stock::create($request->all());
+
+        StockMovement::create([
+            'stock_id' => $stock->id,
+            'user_id' => Auth::id(),
+            'change' => $stock->quantity,
+            'quantity_after' => $stock->quantity,
+            'reason' => 'Initial stock',
+        ]);
 
         return redirect('/stocks');
     }
@@ -67,7 +93,21 @@ class StockController extends Controller
      */
     public function update(Request $request, Stock $stock)
     {
+        $oldQuantity = $stock->quantity;
+
         $stock->update($request->all());
+
+        $diff = $stock->quantity - $oldQuantity;
+        if ($diff != 0) {
+            StockMovement::create([
+                'stock_id' => $stock->id,
+                'user_id' => Auth::id(),
+                'change' => $diff,
+                'quantity_after' => $stock->quantity,
+                'reason' => 'Stock update',
+            ]);
+        }
+
         return redirect('/stocks');
     }
 
@@ -78,5 +118,16 @@ class StockController extends Controller
     {
         $stock->delete();
         return redirect('/stocks');
+    }
+
+    /**
+     * Display the stock movement history for a specific stock item.
+     */
+    public function history(Stock $stock)
+    {
+        return Inertia::render('Stocks/History', [
+            'stock' => $stock,
+            'movements' => $stock->movements()->with('user')->latest()->get(),
+        ]);
     }
 }
