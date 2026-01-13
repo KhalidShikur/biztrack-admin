@@ -83,21 +83,12 @@ vendor/bin/pest
 
 ## Screenshots
 
-Thanks — I found your screenshots in `docs/screenshots/` and added them below. Replace captions as you like.
+Below are the dashboard screenshots (left-to-right, top-to-bottom):
 
-```md
-![Dashboard — KPIs & charts](docs/screenshots/s1.png)
-*Main dashboard with KPIs and interactive charts.*
-
-![Stocks list — low stock indicators](docs/screenshots/s2.png)
-*Stocks index showing quantities and low-stock highlights.*
-
-![Stock detail / history](docs/screenshots/s3.png)
-*Stock history and movement timeline for a selected product.*
-
-![Create/Edit stock form](docs/screenshots/s4.png)
-*Create / Edit stock form with validation and field hints.*
-```
+| | |
+|---|---|
+| ![s1](docs/screenshots/s1.png) | ![s2](docs/screenshots/s2.png) |
+| ![s3](docs/screenshots/s3.png) | ![s4](docs/screenshots/s4.png) |
 
 Suggested image sizes: hero 1200×700, detail 1000×600.
 
