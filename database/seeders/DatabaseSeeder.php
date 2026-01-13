@@ -13,13 +13,17 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // User::factory(10)->create();
-
+        // Admin account
         User::factory()->create([
             'name' => 'Admin User',
             'email' => 'admin@biztrack.com',
             'password' => bcrypt('adminPassword'),
             'role' => 'admin'
         ]);
+
+        // For safety, only run heavy demo seeding in local or when DEMO_SEED env is set
+        if (app()->environment('local') || env('DEMO_SEED', false)) {
+            $this->call(DemoSeeder::class);
+        }
     }
 }
