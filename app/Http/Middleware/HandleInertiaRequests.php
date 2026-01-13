@@ -4,6 +4,7 @@ namespace App\Http\Middleware;
 
 use Illuminate\Foundation\Inspiring;
 use Illuminate\Http\Request;
+use App\Models\Stock;
 use Inertia\Middleware;
 
 class HandleInertiaRequests extends Middleware
@@ -46,6 +47,8 @@ class HandleInertiaRequests extends Middleware
                 'user' => $request->user(),
             ],
             'sidebarOpen' => ! $request->hasCookie('sidebar_state') || $request->cookie('sidebar_state') === 'true',
+            'lowStockCount' => Stock::whereColumn('quantity', '<=', 'low_stock_alert')->count(),
+            'lowStockProducts' => Stock::whereColumn('quantity', '<=', 'low_stock_alert')->get(['id', 'name', 'quantity'])->toArray(),
         ];
     }
 }

@@ -4,6 +4,7 @@ import {
     SidebarMenu,
     SidebarMenuButton,
     SidebarMenuItem,
+    SidebarMenuBadge,
 } from '@/components/ui/sidebar';
 import { useActiveUrl } from '@/hooks/use-active-url';
 import { type NavItem } from '@/types';
@@ -28,6 +29,7 @@ export function NavMain({ items = [] }: { items: NavItem[] }) {
                                 <span>{item.title}</span>
                             </Link>
                         </SidebarMenuButton>
+                        {item.badge !== undefined && <SidebarMenuBadge>{item.badge}</SidebarMenuBadge>}
                     </SidebarMenuItem>
                 ))}
             </SidebarMenu>

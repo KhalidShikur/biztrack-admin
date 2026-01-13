@@ -3,87 +3,55 @@ import { store } from '@/routes/register';
 import { Form, Head } from '@inertiajs/react';
 
 import InputError from '@/components/input-error';
-import TextLink from '@/components/text-link';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Spinner } from '@/components/ui/spinner';
-import AuthLayout from '@/layouts/auth-layout';
+import AuthShell from '@/layouts/AuthShell';
+import TextLink from '@/components/text-link';
 
 export default function Register() {
     return (
-        <AuthLayout
-            title="Create an account"
-            description="Enter your details below to create your account"
-        >
+        <>
             <Head title="Register" />
-            <Form
-                {...store.form()}
-                resetOnSuccess={['password', 'password_confirmation']}
-                disableWhileProcessing
-                className="flex flex-col gap-6"
+
+            <AuthShell
+                title="Create account"
+                subtitle="Start managing your business in minutes"
             >
-                {({ processing, errors }) => (
-                    <>
-                        <div className="grid gap-6">
-                            <div className="grid gap-2">
-                                <Label htmlFor="name">Name</Label>
-                                <Input
-                                    id="name"
-                                    type="text"
-                                    required
-                                    autoFocus
-                                    tabIndex={1}
-                                    autoComplete="name"
-                                    name="name"
-                                    placeholder="Full name"
-                                />
-                                <InputError
-                                    message={errors.name}
-                                    className="mt-2"
-                                />
+                <Form
+                    {...store.form()}
+                    resetOnSuccess={['password', 'password_confirmation']}
+                >
+                    {({ processing, errors }) => (
+                        <div className="space-y-4">
+                            <div>
+                                <Label>Name</Label>
+                                <Input name="name" placeholder="John Doe" />
+                                <InputError message={errors.name} />
                             </div>
 
-                            <div className="grid gap-2">
-                                <Label htmlFor="email">Email address</Label>
-                                <Input
-                                    id="email"
-                                    type="email"
-                                    required
-                                    tabIndex={2}
-                                    autoComplete="email"
-                                    name="email"
-                                    placeholder="email@example.com"
-                                />
+                            <div>
+                                <Label>Email</Label>
+                                <Input name="email" placeholder="you@email.com" />
                                 <InputError message={errors.email} />
                             </div>
 
-                            <div className="grid gap-2">
-                                <Label htmlFor="password">Password</Label>
+                            <div>
+                                <Label>Password</Label>
                                 <Input
-                                    id="password"
                                     type="password"
-                                    required
-                                    tabIndex={3}
-                                    autoComplete="new-password"
                                     name="password"
-                                    placeholder="Password"
+                                    placeholder="••••••••"
                                 />
                                 <InputError message={errors.password} />
                             </div>
 
-                            <div className="grid gap-2">
-                                <Label htmlFor="password_confirmation">
-                                    Confirm password
-                                </Label>
+                            <div>
+                                <Label>Confirm password</Label>
                                 <Input
-                                    id="password_confirmation"
                                     type="password"
-                                    required
-                                    tabIndex={4}
-                                    autoComplete="new-password"
                                     name="password_confirmation"
-                                    placeholder="Confirm password"
                                 />
                                 <InputError
                                     message={errors.password_confirmation}
@@ -92,24 +60,26 @@ export default function Register() {
 
                             <Button
                                 type="submit"
-                                className="mt-2 w-full"
-                                tabIndex={5}
-                                data-test="register-user-button"
+                                className="w-full"
+                                disabled={processing}
                             >
                                 {processing && <Spinner />}
                                 Create account
                             </Button>
-                        </div>
 
-                        <div className="text-center text-sm text-muted-foreground">
-                            Already have an account?{' '}
-                            <TextLink href={login()} tabIndex={6}>
-                                Log in
-                            </TextLink>
+                            <p className="text-center text-sm text-neutral-400">
+                                Already have an account?{' '}
+                                <TextLink
+                                    href={login()}
+                                    className="text-white underline"
+                                >
+                                    Login
+                                </TextLink>
+                            </p>
                         </div>
-                    </>
-                )}
-            </Form>
-        </AuthLayout>
+                    )}
+                </Form>
+            </AuthShell>
+        </>
     );
 }

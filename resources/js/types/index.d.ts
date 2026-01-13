@@ -20,6 +20,7 @@ export interface NavItem {
     href: NonNullable<InertiaLinkProps['href']>;
     icon?: LucideIcon | null;
     isActive?: boolean;
+    badge?: number | string;
 }
 
 export interface SharedData {
@@ -27,6 +28,8 @@ export interface SharedData {
     quote: { message: string; author: string };
     auth: Auth;
     sidebarOpen: boolean;
+    lowStockCount?: number;
+    lowStockProducts?: Array<{ id: number; name: string; quantity: number }>;
     [key: string]: unknown;
 }
 
